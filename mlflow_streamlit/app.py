@@ -11,7 +11,12 @@ import os
 # model_uri = "runs:/f61d27f11f684f67a94852cd60142389/catboost_model"
 # model = mlflow.catboost.load_model(model_uri)
 
-model_path = "catboost_model.cbm"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model_path = os.path.join(BASE_DIR, "catboost_model.cbm")
+encoder_path = os.path.join(BASE_DIR, "encoders.pkl")
+
+# model_path = "catboost_model.cbm"
 
 if os.path.exists(model_path):
     model = CatBoostRegressor()
@@ -20,7 +25,8 @@ else:
     st.error(f"Model file not found at: {model_path}")
 
 # Load the saved encoders (LabelEncoders and One-Hot Encoded columns)
-encoders = joblib.load('encoders.pkl')
+# encoders = joblib.load('encoders.pkl')
+encoders = joblib.load(encoder_path)
 outlet_encoder = encoders['outlet_encoder']
 label_encoders = encoders['label_encoders']
 one_hot_columns = encoders['one_hot_columns']
