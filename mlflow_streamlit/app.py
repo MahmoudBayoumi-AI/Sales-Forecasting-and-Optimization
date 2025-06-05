@@ -4,16 +4,20 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.preprocessing import LabelEncoder
-
+from catboost import CatBoostRegressor
+import os
 
 # Load the trained CatBoost model from MLflow
 # model_uri = "runs:/f61d27f11f684f67a94852cd60142389/catboost_model"
 # model = mlflow.catboost.load_model(model_uri)
 
-from catboost import CatBoostRegressor
-model = CatBoostRegressor()
-model.load_model("catboost_model.cbm")
+model_path = "catboost_model.cbm"
 
+if os.path.exists(model_path):
+    model = CatBoostRegressor()
+    model.load_model(model_path)
+else:
+    st.error(f"Model file not found at: {model_path}")
 
 # Load the saved encoders (LabelEncoders and One-Hot Encoded columns)
 encoders = joblib.load('encoders.pkl')
